@@ -130,6 +130,7 @@ cat <<-'EOF' > /etc/pacman.conf
 	NoExtract = !usr/lib/modules/*/kernel/drivers/virtio/virtio.ko.gz
 	NoExtract = !usr/lib/modules/*/kernel/drivers/input/serio/i8042.ko.gz
 	NoExtract = !usr/lib/modules/*/kernel/drivers/input/serio/serio.ko.gz
+	NoExtract = !usr/lib/modules/*/kernel/drivers/net/ethernet/intel/e1000/e1000.ko.gz
 	[core]
 	Include = /etc/pacman.d/mirrorlist
 	[extra]
@@ -171,7 +172,10 @@ arch-chroot /mnt pacman -S --noconfirm \
 	sudo \
 	sed \
 	virtualbox-guest-utils-nox \
-	virtualbox-guest-modules-arch
+	virtualbox-guest-modules-arch \
+	iproute2 \
+	netctl \
+	dhcpcd
 rm /mnt/var/cache/pacman/pkg/*
 cat <<-'EOF' > /mnt/etc/ssh/sshd_config
 	UseDNS no
@@ -179,16 +183,14 @@ EOF
 cat <<-'EOF' > /mnt/etc/sudoers.d/vagrant
 	vagrant ALL=(ALL) NOPASSWD: ALL
 EOF
-cat <<-'EOF' > /mnt/etc/systemd/network/wired-dhcp.network
-	[Match]
-	Name=en*
-	[Network]
-	DHCP=yes
+cat <<-'EOF' > /mnt/etc/netctl/wired-dhcp
+	Description='A basic dhcp ethernet connection'
+	Interface=enp0s3
+	Connection=ethernet
+	IP=dhcp
 EOF
-ln -sf /run/systemd/resolve/resolv.conf /mnt/etc/resolv.conf
-arch-chroot /mnt systemctl enable systemd-networkd
-arch-chroot /mnt systemctl enable systemd-resolved
 arch-chroot /mnt systemctl enable sshd.socket
+arch-chroot /mnt netctl enable wired-dhcp
 arch-chroot /mnt ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
 arch-chroot /mnt ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
 arch-chroot /mnt <<-'EOF'
