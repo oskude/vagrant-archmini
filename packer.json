@@ -1,0 +1,33 @@
+{
+	"builders": [
+		{
+			"type": "virtualbox-iso",
+			"iso_url": "https://mirrors.kernel.org/archlinux/iso/2016.06.01/archlinux-2016.06.01-dual.iso",
+			"iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/2016.06.01/sha1sums.txt",
+			"iso_checksum_type": "sha1",
+			"guest_os_type": "ArchLinux_64",
+			"guest_additions_mode": "disable",
+			"http_directory": ".",
+			"ssh_username": "vagrant",
+			"ssh_password": "vagrant",
+			"ssh_timeout": "20m",
+			"headless" : false,
+			"disk_size": 1000,
+			"boot_wait": "5s",
+			"boot_command": [
+				"<enter><wait10><wait10>",
+				"curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install.sh<enter><wait5>",
+				"bash ./install.sh 2>&1 | tee /install.log<enter>"
+			],
+			"vboxmanage": [
+				["modifyvm", "{{.Name}}", "--nictype1", "virtio"]
+			]
+		}
+	],
+	"post-processors": [
+		{
+			"type": "vagrant",
+			"output": "archmini.box"
+		}
+	]
+}
