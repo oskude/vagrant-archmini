@@ -1,7 +1,7 @@
 default: build
 
 build:
-	packer-io build packer.json
+	packer build packer.json
 
 test:
 	vagrant box add archmini-test archmini.box
