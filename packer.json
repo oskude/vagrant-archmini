@@ -10,7 +10,7 @@
 			"http_directory": ".",
 			"ssh_username": "vagrant",
 			"ssh_password": "vagrant",
-			"ssh_timeout": "20m",
+			"ssh_timeout": "60m",
 			"headless" : false,
 			"disk_size": 1000,
 			"boot_wait": "5s",
