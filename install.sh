@@ -148,7 +148,6 @@ cat <<-'EOF' > /etc/pacman.conf
 	[community]
 	Include = /etc/pacman.d/mirrorlist
 EOF
-pacman -Sy
 pacstrap /mnt filesystem linux systemd bash pacman
 rm /mnt/var/cache/pacman/pkg/*
 cp /etc/pacman.conf /mnt/etc/pacman.conf
