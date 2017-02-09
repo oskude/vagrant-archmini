@@ -7,7 +7,7 @@ set -o xtrace
 ################################################################################
 sgdisk /dev/sda --zap-all
 sgdisk /dev/sda -n 1:0:0 -t 1:8300 -A 1:set:2
-mkfs.ext4 -T small /dev/sda1
+mkfs.ext4 -T small -O \^64bit /dev/sda1
 mount /dev/sda1 /mnt
 
 ################################################################################
