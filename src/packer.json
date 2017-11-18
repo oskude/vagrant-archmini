@@ -17,6 +17,7 @@
 			"boot_command": [
 				"<enter><wait10><wait10>",
 				"curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/src/install.sh<enter><wait5>",
+				"curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/src/pacman.conf<enter><wait5>",
 				"bash ./install.sh 2>&1 | tee /install.log<enter>"
 			],
 			"vboxmanage": [
