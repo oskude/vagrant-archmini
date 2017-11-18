@@ -6,10 +6,14 @@ set -o xtrace
 # Prepare disk
 ################################################################################
 sgdisk /dev/sda --zap-all
-sgdisk /dev/sda -n 1:0:0 -t 1:8304 -c 1:'root' -A 1:set:2
+sgdisk /dev/sda -n 1:0:+50M -t 1:ef00 -c 1:'boot'
+sgdisk /dev/sda -n 2:0:0    -t 2:8304 -c 2:'root'
 sleep 1 # without this by-partlabel is not yet populated
+mkfs.vfat /dev/disk/by-partlabel/boot
 mkfs.ext4 -T small -O \^64bit /dev/disk/by-partlabel/root
 mount /dev/disk/by-partlabel/root /mnt
+mkdir /mnt/boot
+mount /dev/disk/by-partlabel/boot /mnt/boot
 
 ################################################################################
 # Install mini-base
@@ -87,28 +91,23 @@ EOF
 ################################################################################
 # Install bootloader
 ################################################################################
-arch-chroot /mnt pacman -S --noconfirm syslinux
-arch-chroot /mnt syslinux-install_update -im
-rm /mnt/var/cache/pacman/pkg/*
-cat <<-'EOF'> /mnt/boot/syslinux/syslinux.cfg
-	PROMPT 1
-	TIMEOUT 1
-	DEFAULT arch
-	LABEL arch
-	MENU LABEL Arch Linux
-	LINUX ../vmlinuz-linux
-	APPEND root=PARTLABEL=root init=/usr/lib/systemd/systemd rw
-	INITRD ../initramfs-linux.img
+arch-chroot /mnt bootctl --path=/boot install
+cat <<-'EOF'> /mnt/boot/loader/loader.conf
+	default arch
+EOF
+cat <<-'EOF'> /mnt/boot/loader/entries/arch.conf
+	title   Arch Linux
+	linux   /vmlinuz-linux
+	initrd  /initramfs-linux.img
+	options root=PARTLABEL=root init=/usr/lib/systemd/systemd rw
 EOF
 
 ################################################################################
 # Remove non-critical
 ################################################################################
-rm -rf /mnt/usr/lib/syslinux/*
 rm -rf /mnt/var/log/*
 rm -rf /mnt/var/cache/*
 rm -rf /mnt/var/lib/pacman/sync/*
-rm -rf /mnt/usr/lib/syslinux/*
 rm -rf /mnt/lost+found
 
 ################################################################################
@@ -117,6 +116,8 @@ rm -rf /mnt/lost+found
 cp /install.log /mnt/
 dd if=/dev/zero of=/mnt/moarzeros bs=1M
 rm /mnt/moarzeros
+dd if=/dev/zero of=/mnt/boot/moarzeros bs=1M
+rm /mnt/boot/moarzeros
 sync
-umount /mnt
+umount -R /mnt
 systemctl reboot
