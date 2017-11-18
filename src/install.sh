@@ -18,9 +18,11 @@ cat <<-'EOF' > /etc/pacman.d/mirrorlist
 	Server = http://mirrors.kernel.org/archlinux/$repo/os/$arch
 EOF
 cp pacman.conf /etc/pacman.conf
+cp noextract /etc/pacman.d/noextract
 pacstrap /mnt filesystem linux systemd bash pacman
 rm /mnt/var/cache/pacman/pkg/*
 cp /etc/pacman.conf /mnt/etc/pacman.conf
+cp noextract /mnt/etc/pacman.d/
 ln -sf /usr/share/zoneinfo/UTC /mnt/etc/localtime
 cat <<-'EOF' > /mnt/etc/hostname
 	archmini
