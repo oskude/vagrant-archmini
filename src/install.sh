@@ -6,9 +6,10 @@ set -o xtrace
 # Prepare disk
 ################################################################################
 sgdisk /dev/sda --zap-all
-sgdisk /dev/sda -n 1:0:0 -t 1:8300 -A 1:set:2
-mkfs.ext4 -T small -O \^64bit /dev/sda1
-mount /dev/sda1 /mnt
+sgdisk /dev/sda -n 1:0:0 -t 1:8304 -c 1:'root' -A 1:set:2
+sleep 1 # without this by-partlabel is not yet populated
+mkfs.ext4 -T small -O \^64bit /dev/disk/by-partlabel/root
+mount /dev/disk/by-partlabel/root /mnt
 
 ################################################################################
 # Install mini-base
@@ -96,7 +97,7 @@ cat <<-'EOF'> /mnt/boot/syslinux/syslinux.cfg
 	LABEL arch
 	MENU LABEL Arch Linux
 	LINUX ../vmlinuz-linux
-	APPEND root=/dev/sda1 init=/usr/lib/systemd/systemd rw
+	APPEND root=PARTLABEL=root init=/usr/lib/systemd/systemd rw
 	INITRD ../initramfs-linux.img
 EOF
 
