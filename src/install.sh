@@ -20,7 +20,7 @@ cp pacman.conf /etc/pacman.conf
 pacstrap /mnt filesystem linux systemd bash pacman
 rm /mnt/var/cache/pacman/pkg/*
 cp /etc/pacman.conf /mnt/etc/pacman.conf
-ln -s /usr/share/zoneinfo/UTC /mnt/etc/localtime
+ln -sf /usr/share/zoneinfo/UTC /mnt/etc/localtime
 cat <<-'EOF' > /mnt/etc/hostname
 	archmini
 EOF
@@ -54,6 +54,8 @@ arch-chroot /mnt pacman -S --noconfirm \
 	iproute2 \
 	netctl \
 	dhcpcd
+# we don't need perl with openssl
+arch-chroot /mnt pacman --noconfirm -Rddnsu perl
 rm /mnt/var/cache/pacman/pkg/*
 cat <<-'EOF' > /mnt/etc/ssh/sshd_config
 	UseDNS no
@@ -101,7 +103,6 @@ EOF
 ################################################################################
 # Remove non-critical
 ################################################################################
-arch-chroot /mnt pacman --noconfirm -Rddnsu perl texinfo
 rm -rf /mnt/usr/lib/syslinux/*
 rm -rf /mnt/var/log/*
 rm -rf /mnt/var/cache/*
