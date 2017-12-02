@@ -1,6 +1,6 @@
 # You might need some of these!
 NoExtract = usr/lib/libgo.*
-NoExtract = usr/lib/libgfortran
+NoExtract = usr/lib/libgfortran*
 NoExtract = usr/bin/systemd-analyze
 NoExtract = usr/bin/sqldiff
 NoExtract = usr/bin/showdb

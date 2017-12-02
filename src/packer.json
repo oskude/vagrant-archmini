@@ -30,7 +30,7 @@
 	"post-processors": [
 		{
 			"type": "vagrant",
-			"output": "archmini.box"
+			"output": "miniarch.box"
 		}
 	]
 }

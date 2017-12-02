@@ -1,10 +1,10 @@
 Vagrant.configure(2) do |config|
-	config.vm.box = "archmini-test"
-	config.vm.hostname = "whatever"
+	config.vm.box = "miniarch-test"
+	config.vm.hostname = "miniarch"
 	config.vm.network "private_network", ip:"10.20.30.40"
-	config.vm.provider "virtualbox" do |vb|
-		vb.gui = true
-		vb.cpus = 1
-		vb.memory = "200"
+	config.vm.provider "virtualbox" do |vbox|
+		vbox.gui = true
+		vbox.cpus = 1
+		vbox.memory = "500"
 	end
 end

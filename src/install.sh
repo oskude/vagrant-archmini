@@ -24,9 +24,6 @@ rm /mnt/var/cache/pacman/pkg/*
 cp /etc/pacman.conf /mnt/etc/pacman.conf
 cp noextract /mnt/etc/pacman.d/
 ln -sf /usr/share/zoneinfo/UTC /mnt/etc/localtime
-cat <<-'EOF' > /mnt/etc/hostname
-	archmini
-EOF
 cat <<-'EOF' > /mnt/etc/locale.conf
 	LANG=C
 EOF

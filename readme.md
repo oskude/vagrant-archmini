@@ -1,12 +1,12 @@
-# Archmini
+# Miniarch
 
-Archmini is a minimal archlinux box for vagrant, that tries to remove everything non-critical for running a (web) app in development environment... or something.
+Miniarch is a minimal Archlinux box for Vagrant, that tries to remove everything non-critical for running a (web) app in development environment... or something.
 
 Just for fun™
 
 ## Requirements
 
-You need the following tools to build Archmini:
+You need the following tools to build Miniarch:
 
 - [Vagrant](https://www.vagrantup.com/)
 - [VirtualBox](https://www.virtualbox.org/)
@@ -18,7 +18,7 @@ You need the following tools to build Archmini:
 ```
 $ make
 ```
-> *If you don't have GNU Make, you can manually run the commands in [Makefile](https://github.com/oskude/vagrant-archmini/blob/master/Makefile)*
+> *If you don't have GNU Make, you can manually run the commands in [Makefile](https://github.com/oskude/vagrant-miniarch/blob/master/Makefile)*
 
 ## Test
 
